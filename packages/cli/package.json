@@ -1,0 +1,26 @@
+{
+  "name": "@reqvyn/cli",
+  "version": "0.1.0",
+  "description": "REQVYN command line runner for CI/CD – Send. Inspect. Repeat.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "bin": { "reqvyn": "./dist/reqvyn.cjs" },
+  "files": ["dist"],
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "@reqvyn/shared": "workspace:*",
+    "@reqvyn/core": "workspace:*",
+    "@reqvyn/collection-engine": "workspace:*",
+    "@reqvyn/environment-engine": "workspace:*",
+    "@reqvyn/runner": "workspace:*",
+    "@reqvyn/import-export": "workspace:*",
+    "@reqvyn/http-engine": "workspace:*",
+    "@reqvyn/test-engine": "workspace:*"
+  }
+}

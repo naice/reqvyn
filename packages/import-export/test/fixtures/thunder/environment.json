@@ -1,0 +1,10 @@
+{
+  "client": "Thunder Client",
+  "environmentName": "Thunder Local",
+  "dateExported": "2025-01-01T00:00:00.000Z",
+  "version": "1.1",
+  "variables": [
+    { "name": "host", "value": "http://localhost:3000" },
+    { "name": "token", "value": "", "isSecret": true }
+  ]
+}

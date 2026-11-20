@@ -1,0 +1,40 @@
+{
+  "name": "Bruno Export",
+  "version": "1",
+  "uid": "bruno-uid-1",
+  "items": [
+    {
+      "type": "folder",
+      "name": "Things",
+      "seq": 1,
+      "root": { "request": { "headers": [{ "name": "X-Folder", "value": "1", "enabled": true }] } },
+      "items": [
+        {
+          "type": "http-request",
+          "name": "Make thing",
+          "seq": 1,
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/things",
+            "params": [],
+            "headers": [{ "name": "Content-Type", "value": "application/json", "enabled": true }],
+            "body": { "mode": "json", "json": "{\"a\":1}" },
+            "auth": { "mode": "inherit" },
+            "assertions": [{ "name": "res.status", "value": "eq 201", "enabled": true }],
+            "vars": { "req": [], "res": [{ "name": "thingId", "value": "res.body.id", "enabled": true }] }
+          }
+        }
+      ]
+    },
+    {
+      "type": "http-request",
+      "name": "Ping",
+      "seq": 2,
+      "request": { "method": "GET", "url": "{{baseUrl}}/ping", "params": [], "headers": [], "body": { "mode": "none" }, "auth": { "mode": "none" } }
+    }
+  ],
+  "environments": [
+    { "name": "Local", "variables": [{ "name": "baseUrl", "value": "http://localhost:4000", "enabled": true }, { "name": "apiKey", "value": "should-not-import", "secret": true }] }
+  ],
+  "root": { "request": { "auth": { "mode": "bearer", "bearer": { "token": "{{token}}" } } } }
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "v": 2,
+    "name": "Hopp Sample",
+    "folders": [
+      {
+        "v": 2,
+        "name": "Pets",
+        "folders": [],
+        "requests": [
+          {
+            "v": "4",
+            "name": "Find pet",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/pets/1",
+            "params": [{ "key": "fields", "value": "name", "active": true }],
+            "headers": [{ "key": "Accept", "value": "application/json", "active": true }],
+            "auth": { "authType": "inherit", "authActive": true },
+            "body": { "contentType": null, "body": null },
+            "preRequestScript": "",
+            "testScript": "pw.test('ok', () => pw.expect(pw.response.status).toBe(200));",
+            "requestVariables": []
+          }
+        ],
+        "auth": { "authType": "inherit", "authActive": true },
+        "headers": []
+      }
+    ],
+    "requests": [
+      {
+        "v": "4",
+        "name": "Add pet",
+        "method": "POST",
+        "endpoint": "<<baseUrl>>/pets",
+        "params": [],
+        "headers": [],
+        "auth": { "authType": "api-key", "authActive": true, "key": "X-API-Key", "value": "<<apiKey>>", "addTo": "HEADERS" },
+        "body": { "contentType": "application/json", "body": "{\"name\":\"Rex\"}" },
+        "preRequestScript": "",
+        "testScript": ""
+      },
+      {
+        "v": "4",
+        "name": "Login form",
+        "method": "POST",
+        "endpoint": "<<baseUrl>>/login",
+        "params": [],
+        "headers": [],
+        "auth": { "authType": "none", "authActive": true },
+        "body": { "contentType": "application/x-www-form-urlencoded", "body": "user: demo\npass: <<pass>>" },
+        "preRequestScript": "",
+        "testScript": ""
+      }
+    ],
+    "auth": { "authType": "bearer", "authActive": true, "token": "<<token>>" },
+    "headers": []
+  }
+]

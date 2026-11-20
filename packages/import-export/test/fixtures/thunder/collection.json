@@ -1,0 +1,55 @@
+{
+  "client": "Thunder Client",
+  "collectionName": "Thunder Sample",
+  "dateExported": "2025-01-01T00:00:00.000Z",
+  "version": "1.2",
+  "folders": [
+    { "_id": "f-child", "name": "Nested", "containerId": "f-root", "created": "2025-01-01", "sortNum": 20000 },
+    { "_id": "f-root", "name": "Accounts", "containerId": "", "created": "2025-01-01", "sortNum": 10000 }
+  ],
+  "requests": [
+    {
+      "_id": "r1",
+      "colId": "c1",
+      "containerId": "f-root",
+      "name": "List accounts",
+      "url": "{{host}}/accounts?page=1",
+      "method": "GET",
+      "sortNum": 10000,
+      "headers": [{ "name": "Accept", "value": "application/json" }],
+      "params": [{ "name": "page", "value": "1", "isPath": false }],
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.items[0].id", "action": "istype", "value": "number" },
+        { "type": "set-env-var", "custom": "json.items[0].id", "action": "setto", "value": "{{accountId}}" }
+      ]
+    },
+    {
+      "_id": "r2",
+      "colId": "c1",
+      "containerId": "f-child",
+      "name": "Get account",
+      "url": "{{host}}/accounts/{id}",
+      "method": "GET",
+      "sortNum": 20000,
+      "params": [{ "name": "id", "value": "7", "isPath": true }],
+      "auth": { "type": "bearer", "bearer": "{{token}}" }
+    },
+    {
+      "_id": "r3",
+      "colId": "c1",
+      "containerId": "",
+      "name": "Create account",
+      "url": "{{host}}/accounts",
+      "method": "POST",
+      "sortNum": 30000,
+      "body": { "type": "json", "raw": "{\"name\":\"x\"}", "form": [] },
+      "preReq": "tc.setVar('a', 1);",
+      "docs": "Creates an account"
+    }
+  ],
+  "settings": {
+    "headers": [{ "name": "X-Client", "value": "thunder" }],
+    "auth": { "type": "basic", "basic": { "username": "demo", "password": "{{pass}}" } }
+  }
+}

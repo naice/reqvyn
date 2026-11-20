@@ -1,0 +1,868 @@
+{
+  "name": "reqvyn",
+  "displayName": "REQVYN – API Client",
+  "description": "Local-first API client: Send. Inspect. Repeat.",
+  "version": "0.1.0",
+  "publisher": "reqvyn",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/naice/reqvyn.git",
+    "directory": "apps/vscode-extension"
+  },
+  "homepage": "https://github.com/naice/reqvyn#readme",
+  "bugs": {
+    "url": "https://github.com/naice/reqvyn/issues"
+  },
+  "private": true,
+  "icon": "media/icon.png",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Testing",
+    "Programming Languages",
+    "Other"
+  ],
+  "main": "./dist/extension.cjs",
+  "scripts": {
+    "build": "node build.mjs",
+    "watch": "node build.mjs --watch",
+    "package": "vsce package --no-dependencies --allow-missing-repository -o ../../reqvyn.vsix"
+  },
+  "dependencies": {
+    "@reqvyn/shared": "workspace:*",
+    "@reqvyn/core": "workspace:*",
+    "@reqvyn/collection-engine": "workspace:*",
+    "@reqvyn/environment-engine": "workspace:*",
+    "@reqvyn/http-engine": "workspace:*",
+    "@reqvyn/auth-engine": "workspace:*",
+    "@reqvyn/test-engine": "workspace:*",
+    "@reqvyn/runner": "workspace:*",
+    "@reqvyn/import-export": "workspace:*",
+    "@reqvyn/sync-core": "workspace:*",
+    "@reqvyn/provider-sdk": "workspace:*",
+    "@reqvyn/provider-local": "workspace:*",
+    "@reqvyn/provider-git": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^3.2.1"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "In untrusted workspaces REQVYN does not run scripts and sync providers are disabled. Security-relevant settings (TLS verification, proxy, CA certificates, process environment access, scripts) are only read from user settings.",
+      "restrictedConfigurations": [
+        "reqvyn.http.verifyTls",
+        "reqvyn.http.proxy",
+        "reqvyn.http.noProxy",
+        "reqvyn.http.caCertificates",
+        "reqvyn.allowProcessEnv",
+        "reqvyn.scripts.enabled"
+      ]
+    },
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "REQVYN stores collections as files in the workspace folder."
+    }
+  },
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "reqvyn",
+          "title": "REQVYN",
+          "icon": "media/reqvyn.svg"
+        }
+      ]
+    },
+    "views": {
+      "reqvyn": [
+        {
+          "id": "reqvyn.collections",
+          "name": "Collections"
+        },
+        {
+          "id": "reqvyn.favorites",
+          "name": "Favorites",
+          "visibility": "collapsed"
+        },
+        {
+          "id": "reqvyn.environments",
+          "name": "Environments"
+        },
+        {
+          "id": "reqvyn.history",
+          "name": "History",
+          "visibility": "collapsed"
+        },
+        {
+          "id": "reqvyn.sync",
+          "name": "Sync",
+          "visibility": "collapsed"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "reqvyn.collections",
+        "contents": "No collections yet.\n[$(add) New Request](command:reqvyn.newScratchRequest)\n[$(folder-library) New Collection](command:reqvyn.newCollection)\n[$(cloud-download) Import (Postman, Insomnia, Thunder Client, Bruno, OpenAPI, cURL …)](command:reqvyn.import)\nTo share collections with your team via Git, [initialize workspace storage](command:reqvyn.initWorkspace)."
+      },
+      {
+        "view": "reqvyn.history",
+        "contents": "Sent requests appear here."
+      },
+      {
+        "view": "reqvyn.favorites",
+        "contents": "Star a request to pin it here."
+      },
+      {
+        "view": "reqvyn.sync",
+        "contents": "Synchronize collections with a local folder or a Git repository. Nothing leaves your machine unless you configure it.\n[$(add) Add Sync Provider](command:reqvyn.sync.add)",
+        "when": "isWorkspaceTrusted"
+      }
+    ],
+    "commands": [
+      {
+        "command": "reqvyn.newRequest",
+        "title": "New Request",
+        "category": "REQVYN",
+        "icon": "$(add)"
+      },
+      {
+        "command": "reqvyn.newScratchRequest",
+        "title": "New Unsaved Request",
+        "category": "REQVYN",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "reqvyn.newFolder",
+        "title": "New Folder",
+        "category": "REQVYN",
+        "icon": "$(new-folder)"
+      },
+      {
+        "command": "reqvyn.newCollection",
+        "title": "New Collection",
+        "category": "REQVYN",
+        "icon": "$(folder-library)"
+      },
+      {
+        "command": "reqvyn.openRequest",
+        "title": "Open Request",
+        "category": "REQVYN"
+      },
+      {
+        "command": "reqvyn.rename",
+        "title": "Rename…",
+        "category": "REQVYN"
+      },
+      {
+        "command": "reqvyn.delete",
+        "title": "Delete",
+        "category": "REQVYN"
+      },
+      {
+        "command": "reqvyn.duplicate",
+        "title": "Duplicate",
+        "category": "REQVYN"
+      },
+      {
+        "command": "reqvyn.copyAsCurl",
+        "title": "Copy as cURL",
+        "category": "REQVYN"
+      },
+      {
+        "command": "reqvyn.favorite.toggle",
+        "title": "Toggle Favorite",
+        "category": "REQVYN",
+        "icon": "$(star-empty)"
+      },
+      {
+        "command": "reqvyn.settings",
+        "title": "Settings (Variables, Headers, Auth, Scripts)…",
+        "category": "REQVYN",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "reqvyn.run",
+        "title": "Run…",
+        "category": "REQVYN",
+        "icon": "$(run-all)"
+      },
+      {
+        "command": "reqvyn.send",
+        "title": "Send Request",
+        "category": "REQVYN",
+        "icon": "$(send)"
+      },
+      {
+        "command": "reqvyn.refresh",
+        "title": "Refresh",
+        "category": "REQVYN",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "reqvyn.filter",
+        "title": "Filter Collections…",
+        "category": "REQVYN",
+        "icon": "$(filter)"
+      },
+      {
+        "command": "reqvyn.clearFilter",
+        "title": "Clear Filter",
+        "category": "REQVYN",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "reqvyn.quickOpen",
+        "title": "Quick Open Request…",
+        "category": "REQVYN",
+        "icon": "$(search)"
+      },
+      {
+        "command": "reqvyn.initWorkspace",
+        "title": "Initialize Workspace Storage (.reqvyn)",
+        "category": "REQVYN",
+        "icon": "$(repo)"
+      },
+      {
+        "command": "reqvyn.environment.select",
+        "title": "Select Environment…",
+        "category": "REQVYN",
+        "icon": "$(globe)"
+      },
+      {
+        "command": "reqvyn.environment.setActive",
+        "title": "Toggle Active Environment",
+        "category": "REQVYN",
+        "icon": "$(check)"
+      },
+      {
+        "command": "reqvyn.environment.open",
+        "title": "Edit Environment",
+        "category": "REQVYN"
+      },
+      {
+        "command": "reqvyn.globals.open",
+        "title": "Edit Global Variables",
+        "category": "REQVYN",
+        "icon": "$(globe)"
+      },
+      {
+        "command": "reqvyn.environment.new",
+        "title": "New Environment",
+        "category": "REQVYN",
+        "icon": "$(add)"
+      },
+      {
+        "command": "reqvyn.environment.duplicate",
+        "title": "Duplicate Environment",
+        "category": "REQVYN"
+      },
+      {
+        "command": "reqvyn.environment.delete",
+        "title": "Delete Environment",
+        "category": "REQVYN"
+      },
+      {
+        "command": "reqvyn.clearRuntime",
+        "title": "Clear Runtime Variables and Cookies",
+        "category": "REQVYN",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "reqvyn.history.open",
+        "title": "Open History Entry",
+        "category": "REQVYN"
+      },
+      {
+        "command": "reqvyn.history.delete",
+        "title": "Delete History Entry",
+        "category": "REQVYN",
+        "icon": "$(close)"
+      },
+      {
+        "command": "reqvyn.history.clear",
+        "title": "Clear History",
+        "category": "REQVYN",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "reqvyn.import",
+        "title": "Import…",
+        "category": "REQVYN",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "reqvyn.importClipboard",
+        "title": "Import from Clipboard (cURL, JSON, …)",
+        "category": "REQVYN",
+        "icon": "$(clippy)"
+      },
+      {
+        "command": "reqvyn.openapi.refresh",
+        "title": "Refresh from OpenAPI…",
+        "category": "REQVYN",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "reqvyn.export",
+        "title": "Export…",
+        "category": "REQVYN",
+        "icon": "$(export)"
+      },
+      {
+        "command": "reqvyn.share",
+        "title": "Share as Package (.reqvyn)…",
+        "category": "REQVYN",
+        "icon": "$(package)"
+      },
+      {
+        "command": "reqvyn.sync.add",
+        "title": "Add Sync Provider…",
+        "category": "REQVYN",
+        "icon": "$(add)",
+        "enablement": "isWorkspaceTrusted"
+      },
+      {
+        "command": "reqvyn.sync.edit",
+        "title": "Edit Sync Provider…",
+        "category": "REQVYN",
+        "icon": "$(edit)",
+        "enablement": "isWorkspaceTrusted"
+      },
+      {
+        "command": "reqvyn.sync.remove",
+        "title": "Remove Sync Provider",
+        "category": "REQVYN",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "reqvyn.sync.assign",
+        "title": "Assign Collection to Sync Provider…",
+        "category": "REQVYN",
+        "icon": "$(link)",
+        "enablement": "isWorkspaceTrusted"
+      },
+      {
+        "command": "reqvyn.sync.unassign",
+        "title": "Unassign Collection",
+        "category": "REQVYN",
+        "icon": "$(debug-disconnect)"
+      },
+      {
+        "command": "reqvyn.sync.now",
+        "title": "Sync Now",
+        "category": "REQVYN",
+        "icon": "$(sync)",
+        "enablement": "isWorkspaceTrusted"
+      },
+      {
+        "command": "reqvyn.sync.pull",
+        "title": "Pull (Remote → Local)",
+        "category": "REQVYN",
+        "icon": "$(arrow-down)",
+        "enablement": "isWorkspaceTrusted"
+      },
+      {
+        "command": "reqvyn.sync.push",
+        "title": "Push (Local → Remote)",
+        "category": "REQVYN",
+        "icon": "$(arrow-up)",
+        "enablement": "isWorkspaceTrusted"
+      },
+      {
+        "command": "reqvyn.sync.resolve",
+        "title": "Resolve Conflicts…",
+        "category": "REQVYN",
+        "icon": "$(warning)",
+        "enablement": "isWorkspaceTrusted"
+      },
+      {
+        "command": "reqvyn.sync.pullRemote",
+        "title": "Pull Remote Collection…",
+        "category": "REQVYN",
+        "icon": "$(cloud-download)",
+        "enablement": "isWorkspaceTrusted"
+      },
+      {
+        "command": "reqvyn.sync.all",
+        "title": "Sync All",
+        "category": "REQVYN",
+        "icon": "$(sync)",
+        "enablement": "isWorkspaceTrusted"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "reqvyn.openRequest",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.environment.setActive",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.environment.open",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.environment.duplicate",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.environment.delete",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.history.open",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.history.delete",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.sync.unassign",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.sync.pull",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.sync.push",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.sync.resolve",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.sync.edit",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.sync.remove",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.favorite.toggle",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.copyAsCurl",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.duplicate",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.rename",
+          "when": "false"
+        },
+        {
+          "command": "reqvyn.delete",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "reqvyn.newScratchRequest",
+          "when": "view == reqvyn.collections",
+          "group": "navigation@1"
+        },
+        {
+          "command": "reqvyn.newCollection",
+          "when": "view == reqvyn.collections",
+          "group": "navigation@2"
+        },
+        {
+          "command": "reqvyn.quickOpen",
+          "when": "view == reqvyn.collections",
+          "group": "navigation@3"
+        },
+        {
+          "command": "reqvyn.filter",
+          "when": "view == reqvyn.collections && !reqvyn.collectionsFiltered",
+          "group": "navigation@4"
+        },
+        {
+          "command": "reqvyn.clearFilter",
+          "when": "view == reqvyn.collections && reqvyn.collectionsFiltered",
+          "group": "navigation@4"
+        },
+        {
+          "command": "reqvyn.import",
+          "when": "view == reqvyn.collections",
+          "group": "navigation@5"
+        },
+        {
+          "command": "reqvyn.importClipboard",
+          "when": "view == reqvyn.collections",
+          "group": "1_import"
+        },
+        {
+          "command": "reqvyn.initWorkspace",
+          "when": "view == reqvyn.collections && workspaceFolderCount > 0",
+          "group": "2_workspace"
+        },
+        {
+          "command": "reqvyn.refresh",
+          "when": "view == reqvyn.collections",
+          "group": "3_refresh"
+        },
+        {
+          "command": "reqvyn.history.clear",
+          "when": "view == reqvyn.history",
+          "group": "navigation"
+        },
+        {
+          "command": "reqvyn.environment.new",
+          "when": "view == reqvyn.environments",
+          "group": "navigation@1"
+        },
+        {
+          "command": "reqvyn.environment.select",
+          "when": "view == reqvyn.environments",
+          "group": "navigation@2"
+        },
+        {
+          "command": "reqvyn.globals.open",
+          "when": "view == reqvyn.environments",
+          "group": "1_runtime@1"
+        },
+        {
+          "command": "reqvyn.clearRuntime",
+          "when": "view == reqvyn.environments",
+          "group": "1_runtime@2"
+        },
+        {
+          "command": "reqvyn.sync.add",
+          "when": "view == reqvyn.sync",
+          "group": "navigation@1"
+        },
+        {
+          "command": "reqvyn.sync.all",
+          "when": "view == reqvyn.sync",
+          "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "reqvyn.newCollection",
+          "when": "view == reqvyn.collections && viewItem =~ /^store\\b/",
+          "group": "inline"
+        },
+        {
+          "command": "reqvyn.run",
+          "when": "view == reqvyn.collections && viewItem =~ /^collection\\b/",
+          "group": "inline@1"
+        },
+        {
+          "command": "reqvyn.newRequest",
+          "when": "view == reqvyn.collections && viewItem =~ /^collection\\b/",
+          "group": "inline@2"
+        },
+        {
+          "command": "reqvyn.newFolder",
+          "when": "view == reqvyn.collections && viewItem =~ /^folder\\b/",
+          "group": "inline@1"
+        },
+        {
+          "command": "reqvyn.newRequest",
+          "when": "view == reqvyn.collections && viewItem =~ /^folder\\b/",
+          "group": "inline@2"
+        },
+        {
+          "command": "reqvyn.newRequest",
+          "when": "view == reqvyn.collections && viewItem =~ /^(collection|folder)\\b/",
+          "group": "1_new@1"
+        },
+        {
+          "command": "reqvyn.newFolder",
+          "when": "view == reqvyn.collections && viewItem =~ /^(collection|folder)\\b/",
+          "group": "1_new@2"
+        },
+        {
+          "command": "reqvyn.run",
+          "when": "view == reqvyn.collections && viewItem =~ /^(collection|folder)\\b/",
+          "group": "2_run@1"
+        },
+        {
+          "command": "reqvyn.settings",
+          "when": "view == reqvyn.collections && viewItem =~ /^(collection|folder)\\b/",
+          "group": "2_run@2"
+        },
+        {
+          "command": "reqvyn.export",
+          "when": "view == reqvyn.collections && viewItem =~ /^collection\\b/",
+          "group": "3_share@1"
+        },
+        {
+          "command": "reqvyn.share",
+          "when": "view == reqvyn.collections && viewItem =~ /^collection\\b/",
+          "group": "3_share@2"
+        },
+        {
+          "command": "reqvyn.sync.assign",
+          "when": "view == reqvyn.collections && viewItem =~ /^collection\\b/",
+          "group": "3_share@3"
+        },
+        {
+          "command": "reqvyn.openapi.refresh",
+          "when": "view == reqvyn.collections && viewItem =~ /\\bopenapi\\b/",
+          "group": "3_share@4"
+        },
+        {
+          "command": "reqvyn.favorite.toggle",
+          "when": "view == reqvyn.collections && viewItem =~ /^request\\b/",
+          "group": "inline"
+        },
+        {
+          "command": "reqvyn.copyAsCurl",
+          "when": "view == reqvyn.collections && viewItem =~ /^request\\b/",
+          "group": "2_run@1"
+        },
+        {
+          "command": "reqvyn.settings",
+          "when": "view == reqvyn.collections && viewItem =~ /^request\\b/",
+          "group": "2_run@2"
+        },
+        {
+          "command": "reqvyn.favorite.toggle",
+          "when": "view == reqvyn.collections && viewItem =~ /^request\\b/",
+          "group": "2_run@3"
+        },
+        {
+          "command": "reqvyn.rename",
+          "when": "view == reqvyn.collections && viewItem =~ /^(collection|folder|request)\\b/",
+          "group": "7_edit@1"
+        },
+        {
+          "command": "reqvyn.duplicate",
+          "when": "view == reqvyn.collections && viewItem =~ /^(collection|folder|request)\\b/",
+          "group": "7_edit@2"
+        },
+        {
+          "command": "reqvyn.delete",
+          "when": "view == reqvyn.collections && viewItem =~ /^(collection|folder|request)\\b/",
+          "group": "7_edit@3"
+        },
+        {
+          "command": "reqvyn.history.delete",
+          "when": "view == reqvyn.history && viewItem =~ /^history\\b/",
+          "group": "inline"
+        },
+        {
+          "command": "reqvyn.environment.setActive",
+          "when": "view == reqvyn.environments && viewItem =~ /^environment\\b/",
+          "group": "inline"
+        },
+        {
+          "command": "reqvyn.environment.setActive",
+          "when": "view == reqvyn.environments && viewItem =~ /^environment\\b/",
+          "group": "1_env@1"
+        },
+        {
+          "command": "reqvyn.environment.duplicate",
+          "when": "view == reqvyn.environments && viewItem =~ /^environment\\b/",
+          "group": "1_env@2"
+        },
+        {
+          "command": "reqvyn.environment.delete",
+          "when": "view == reqvyn.environments && viewItem =~ /^environment\\b/",
+          "group": "1_env@3"
+        },
+        {
+          "command": "reqvyn.favorite.toggle",
+          "when": "view == reqvyn.favorites && viewItem =~ /^favorite\\b/",
+          "group": "inline"
+        },
+        {
+          "command": "reqvyn.sync.now",
+          "when": "view == reqvyn.sync && viewItem =~ /^syncInstance\\b/",
+          "group": "inline@1"
+        },
+        {
+          "command": "reqvyn.sync.assign",
+          "when": "view == reqvyn.sync && viewItem =~ /^syncInstance\\b/",
+          "group": "inline@2"
+        },
+        {
+          "command": "reqvyn.sync.pullRemote",
+          "when": "view == reqvyn.sync && viewItem =~ /^syncInstance\\b/",
+          "group": "1_sync@1"
+        },
+        {
+          "command": "reqvyn.sync.edit",
+          "when": "view == reqvyn.sync && viewItem =~ /^syncInstance\\b/",
+          "group": "2_cfg@1"
+        },
+        {
+          "command": "reqvyn.sync.remove",
+          "when": "view == reqvyn.sync && viewItem =~ /^syncInstance\\b/",
+          "group": "2_cfg@2"
+        },
+        {
+          "command": "reqvyn.sync.resolve",
+          "when": "view == reqvyn.sync && viewItem =~ /\\bconflicts\\b/",
+          "group": "inline@0"
+        },
+        {
+          "command": "reqvyn.sync.now",
+          "when": "view == reqvyn.sync && viewItem =~ /^syncAssignment\\b/",
+          "group": "inline@1"
+        },
+        {
+          "command": "reqvyn.sync.pull",
+          "when": "view == reqvyn.sync && viewItem =~ /^syncAssignment\\b/",
+          "group": "1_sync@1"
+        },
+        {
+          "command": "reqvyn.sync.push",
+          "when": "view == reqvyn.sync && viewItem =~ /^syncAssignment\\b/",
+          "group": "1_sync@2"
+        },
+        {
+          "command": "reqvyn.sync.unassign",
+          "when": "view == reqvyn.sync && viewItem =~ /^syncAssignment\\b/",
+          "group": "2_cfg@1"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "reqvyn.send",
+        "key": "ctrl+enter",
+        "mac": "cmd+enter",
+        "when": "activeWebviewPanelId == reqvyn.request"
+      },
+      {
+        "command": "reqvyn.quickOpen",
+        "key": "ctrl+alt+r",
+        "mac": "cmd+alt+r"
+      },
+      {
+        "command": "reqvyn.newScratchRequest",
+        "key": "ctrl+alt+n",
+        "mac": "cmd+alt+n"
+      }
+    ],
+    "configuration": {
+      "title": "REQVYN",
+      "properties": {
+        "reqvyn.http.timeoutMs": {
+          "type": "number",
+          "default": 30000,
+          "minimum": 0,
+          "description": "Request timeout in milliseconds (0 = no timeout)."
+        },
+        "reqvyn.http.followRedirects": {
+          "type": "boolean",
+          "default": true,
+          "description": "Follow HTTP redirects."
+        },
+        "reqvyn.http.maxRedirects": {
+          "type": "number",
+          "default": 10,
+          "minimum": 0,
+          "description": "Maximum number of redirects to follow."
+        },
+        "reqvyn.http.maxResponseMb": {
+          "type": "number",
+          "default": 50,
+          "minimum": 1,
+          "description": "Maximum response body size kept in memory (MB)."
+        },
+        "reqvyn.http.proxy": {
+          "type": "string",
+          "default": "",
+          "description": "Proxy URL (http:// or https://). Falls back to the VS Code setting http.proxy."
+        },
+        "reqvyn.http.noProxy": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Hosts that bypass the proxy (e.g. localhost, .internal.example.com)."
+        },
+        "reqvyn.http.verifyTls": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Verify TLS certificates. **Only disable for local development** – a warning is logged while disabled. Prefer `reqvyn.http.caCertificates` for self-signed or corporate CAs."
+        },
+        "reqvyn.http.caCertificates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Additional trusted CA certificates (PEM files; relative paths are resolved against the workspace folder)."
+        },
+        "reqvyn.http.cookieJar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Store cookies received from responses for the current session."
+        },
+        "reqvyn.scripts.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run pre-request and test scripts (isolated worker, trusted workspaces only)."
+        },
+        "reqvyn.scripts.timeoutMs": {
+          "type": "number",
+          "default": 5000,
+          "minimum": 100,
+          "description": "Maximum run time of a script (ms)."
+        },
+        "reqvyn.scripts.memoryLimitMb": {
+          "type": "number",
+          "default": 64,
+          "minimum": 16,
+          "description": "Memory limit of the script worker (MB)."
+        },
+        "reqvyn.history.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Keep a history of sent requests (stored locally; sensitive values are stripped)."
+        },
+        "reqvyn.history.maxEntries": {
+          "type": "number",
+          "default": 200,
+          "minimum": 1,
+          "description": "Maximum number of history entries."
+        },
+        "reqvyn.allowProcessEnv": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Allow `{{$env:NAME}}` to read environment variables of the VS Code process."
+        }
+      }
+    }
+  },
+  "keywords": [
+    "api",
+    "rest",
+    "http",
+    "client",
+    "graphql",
+    "postman",
+    "openapi",
+    "testing",
+    "local-first",
+    "offline"
+  ],
+  "galleryBanner": {
+    "color": "#0D111B",
+    "theme": "dark"
+  }
+}

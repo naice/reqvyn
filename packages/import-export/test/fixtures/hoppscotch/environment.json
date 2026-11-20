@@ -1,0 +1,11 @@
+[
+  {
+    "v": 1,
+    "id": "env-1",
+    "name": "Hopp Dev",
+    "variables": [
+      { "key": "baseUrl", "value": "https://pets.example.test", "secret": false },
+      { "key": "apiKey", "value": "", "secret": true }
+    ]
+  }
+]

@@ -1,0 +1,170 @@
+/* CodeMirror containers */
+.rv-code {
+  height: 100%;
+  min-height: 0;
+}
+.rv-code .cm-editor {
+  height: 100%;
+}
+.rv-varinput {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.rv-varinput .cm-editor {
+  background: transparent;
+}
+.rv-varinput .cm-editor.cm-focused {
+  outline: none;
+}
+.rv-varinput.is-readonly {
+  opacity: 0.8;
+}
+.rv-cell-var {
+  border: 1px solid transparent;
+  border-radius: var(--rv-radius);
+}
+.rv-cell-var:hover {
+  border-color: var(--rv-input-border);
+}
+.rv-cell-var:focus-within {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: -1px;
+}
+
+/* Syntax tokens (classHighlighter) mapped to VS Code debug/symbol token colours. */
+.tok-keyword,
+.tok-operatorKeyword,
+.tok-modifier {
+  color: var(--vscode-debugTokenExpression-boolean, var(--vscode-symbolIcon-keywordForeground, #569cd6));
+}
+.tok-string,
+.tok-string2,
+.tok-attributeValue {
+  color: var(--vscode-debugTokenExpression-string, #ce9178);
+}
+.tok-number,
+.tok-bool,
+.tok-atom,
+.tok-literal {
+  color: var(--vscode-debugTokenExpression-number, #b5cea8);
+}
+.tok-propertyName,
+.tok-attributeName {
+  color: var(--vscode-debugTokenExpression-name, var(--vscode-symbolIcon-propertyForeground, #9cdcfe));
+}
+.tok-variableName,
+.tok-variableName2 {
+  color: var(--vscode-symbolIcon-variableForeground, var(--vscode-editor-foreground));
+}
+.tok-typeName,
+.tok-className,
+.tok-namespace {
+  color: var(--vscode-symbolIcon-classForeground, #4ec9b0);
+}
+.tok-tagName {
+  color: var(--vscode-symbolIcon-keywordForeground, #569cd6);
+}
+.tok-comment,
+.tok-meta {
+  color: var(--vscode-descriptionForeground);
+  font-style: italic;
+}
+.tok-punctuation,
+.tok-operator {
+  color: var(--vscode-editor-foreground);
+}
+.tok-invalid {
+  color: var(--vscode-errorForeground);
+}
+.tok-link {
+  text-decoration: underline;
+}
+.tok-heading,
+.tok-strong {
+  font-weight: 600;
+}
+.tok-emphasis {
+  font-style: italic;
+}
+
+/* {{variable}} highlighting */
+.rv-var {
+  border-radius: 2px;
+  padding: 0 1px;
+}
+.rv-var--resolved {
+  color: var(--vscode-charts-green, var(--rv-pass));
+  background: color-mix(in srgb, var(--vscode-charts-green, #3fb950) 12%, transparent);
+}
+.rv-var--unresolved {
+  color: var(--vscode-errorForeground, var(--rv-fail));
+  background: color-mix(in srgb, var(--vscode-errorForeground, #f14c4c) 12%, transparent);
+  text-decoration: underline wavy var(--vscode-editorError-foreground, #f14c4c);
+  text-underline-offset: 3px;
+}
+.rv-var--secret {
+  color: var(--vscode-charts-purple, var(--rv-violet));
+  background: color-mix(in srgb, var(--vscode-charts-purple, #a855f7) 12%, transparent);
+}
+.rv-var--dynamic {
+  color: var(--vscode-charts-blue, var(--rv-info));
+  background: color-mix(in srgb, var(--vscode-charts-blue, #3794ff) 12%, transparent);
+}
+body.vscode-high-contrast .rv-var,
+body.vscode-high-contrast-light .rv-var {
+  background: none;
+  outline: 1px dashed currentColor;
+}
+
+.rv-var-tip {
+  padding: 6px 8px;
+  max-width: 420px;
+  font-family: var(--rv-font);
+  font-size: 12px;
+}
+.rv-var-tip__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--rv-mono);
+  font-weight: 600;
+}
+.rv-var-tip__status {
+  font-family: var(--rv-font);
+  font-weight: normal;
+  font-size: 11px;
+  color: var(--rv-muted);
+}
+.rv-var-tip--unresolved .rv-var-tip__status {
+  color: var(--rv-fail);
+}
+.rv-var-tip__value {
+  font-family: var(--rv-mono);
+  margin-top: 4px;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+.rv-var-tip__source {
+  margin-top: 4px;
+  color: var(--rv-muted);
+  font-size: 11px;
+}
+
+/* Search panel inputs follow VS Code inputs */
+.cm-panel.cm-search input,
+.cm-panel.cm-search button {
+  font: inherit;
+  font-size: 12px;
+  color: var(--rv-input-fg);
+  background: var(--rv-input-bg);
+  border: 1px solid var(--rv-input-border);
+  border-radius: var(--rv-radius);
+}
+.cm-panel.cm-search button {
+  color: var(--vscode-button-secondaryForeground);
+  background: var(--vscode-button-secondaryBackground);
+  background-image: none;
+}
+.cm-panel.cm-search label {
+  font-size: 12px;
+}

@@ -1,0 +1,124 @@
+openapi: 3.0.3
+info:
+  title: Pet Store
+  version: 1.0.0
+  description: Fixture spec authored for REQVYN tests.
+servers:
+  - url: https://{region}.pets.example.test/v1
+    variables:
+      region:
+        default: eu
+tags:
+  - name: pets
+    description: Pet operations
+  - name: store
+security:
+  - apiKeyAuth: []
+paths:
+  /pets:
+    get:
+      tags: [pets]
+      operationId: listPets
+      summary: List pets
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 20
+        - name: X-Trace
+          in: header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+    post:
+      tags: [pets]
+      operationId: createPet
+      summary: Create pet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPet'
+      responses:
+        '201':
+          description: created
+  /pets/{petId}:
+    parameters:
+      - $ref: '#/components/parameters/PetId'
+    get:
+      tags: [pets]
+      operationId: getPet
+      summary: Get pet
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+    delete:
+      tags: [pets]
+      operationId: deletePet
+      summary: Delete pet
+      responses:
+        '204':
+          description: gone
+  /store/inventory:
+    get:
+      tags: [store]
+      operationId: getInventory
+      summary: Inventory
+      security: []
+      responses:
+        '200':
+          description: ok
+components:
+  parameters:
+    PetId:
+      name: petId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: abc
+  schemas:
+    Pet:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        tag:
+          type: string
+    NewPet:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Rex
+        tag:
+          type: string
+          enum: [dog, cat]
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    bearerAuth:
+      type: http
+      scheme: bearer

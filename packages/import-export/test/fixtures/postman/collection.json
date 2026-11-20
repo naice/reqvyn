@@ -1,0 +1,109 @@
+{
+  "info": {
+    "_postman_id": "11111111-2222-3333-4444-555555555555",
+    "name": "Sample Store API",
+    "description": "Fixture collection authored for REQVYN tests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.example.test" },
+    { "key": "token", "value": "" }
+  ],
+  "event": [
+    { "listen": "prerequest", "script": { "type": "text/javascript", "exec": ["console.log('collection pre');"] } }
+  ],
+  "item": [
+    {
+      "name": "Users",
+      "description": "User endpoints",
+      "item": [
+        {
+          "name": "Get user",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "X-Debug", "value": "1", "disabled": true }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id?expand=orders&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":id"],
+              "query": [
+                { "key": "expand", "value": "orders" },
+                { "key": "limit", "value": "10" }
+              ],
+              "variable": [{ "key": "id", "value": "42", "description": "User id" }]
+            },
+            "description": "Fetch one user"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": { "type": "text/javascript", "exec": ["pm.test('ok', () => pm.response.to.have.status(200));"] }
+            }
+          ],
+          "response": [{ "name": "Example", "code": 200, "body": "{}" }]
+        },
+        {
+          "name": "Create user",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ada\",\n  \"email\": \"ada@example.test\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/users"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Login (form)",
+      "request": {
+        "auth": { "type": "noauth" },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "username", "value": "demo" },
+            { "key": "password", "value": "{{password}}" }
+          ]
+        },
+        "url": { "raw": "{{baseUrl}}/login", "host": ["{{baseUrl}}"], "path": ["login"] }
+      }
+    },
+    {
+      "name": "Upload avatar",
+      "protocolProfileBehavior": { "followRedirects": false, "strictSSL": false },
+      "request": {
+        "auth": { "type": "basic", "basic": [{ "key": "username", "value": "demo" }, { "key": "password", "value": "not-a-real-password" }] },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "caption", "value": "hello", "type": "text" },
+            { "key": "file", "type": "file", "src": "/tmp/avatar.png" }
+          ]
+        },
+        "url": "{{baseUrl}}/users/42/avatar"
+      }
+    },
+    {
+      "name": "Legacy hawk",
+      "request": {
+        "auth": { "type": "hawk", "hawk": [{ "key": "authId", "value": "x" }] },
+        "method": "GET",
+        "url": "{{baseUrl}}/legacy"
+      }
+    }
+  ]
+}

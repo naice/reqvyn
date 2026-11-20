@@ -1,0 +1,45 @@
+meta {
+  name: Get item
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/items/:itemId?view=full
+  body: none
+  auth: bearer
+}
+
+params:query {
+  view: full
+  ~debug: true
+}
+
+params:path {
+  itemId: 5
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+assert {
+  res.status: eq 200
+  res.body.id: isDefined
+}
+
+vars:post-response {
+  itemName: res.body.name
+}
+
+script:pre-request {
+  bru.setVar("started", Date.now());
+}
+
+docs {
+  Returns a single item.
+}

@@ -1,0 +1,15 @@
+{
+  "name": "reqvyn-sync-rest-example",
+  "displayName": "REQVYN Sync – Self-hosted REST provider (example)",
+  "version": "0.1.0",
+  "private": true,
+  "publisher": "reqvyn-examples",
+  "type": "module",
+  "main": "./dist/extension.cjs",
+  "engines": { "vscode": "^1.90.0" },
+  "extensionDependencies": ["reqvyn.reqvyn"],
+  "activationEvents": ["onStartupFinished"],
+  "scripts": { "build": "esbuild src/extension.ts --bundle --platform=node --format=cjs --external:vscode --outfile=dist/extension.cjs" },
+  "dependencies": { "@reqvyn/provider-sdk": "workspace:*" },
+  "devDependencies": { "@types/vscode": "^1.90.0" }
+}

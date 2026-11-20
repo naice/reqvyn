@@ -1,0 +1,40 @@
+{
+  "name": "reqvyn-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "description": "REQVYN – local-first API client for VS Code. Send. Inspect. Repeat.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/naice/reqvyn.git"
+  },
+  "homepage": "https://github.com/naice/reqvyn#readme",
+  "bugs": {
+    "url": "https://github.com/naice/reqvyn/issues"
+  },
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "pnpm --filter @reqvyn/ui build && pnpm --filter @reqvyn/cli build && pnpm --filter reqvyn build",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p packages/ui/tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "package": "pnpm build && pnpm --filter reqvyn package",
+    "audit:deps": "pnpm audit --prod"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^20.17.0",
+    "esbuild": "^0.24.2",
+    "eslint": "^9.17.0",
+    "prettier": "^3.4.2",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.18.2",
+    "vitest": "^2.1.8"
+  }
+}

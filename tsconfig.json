@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": { "noEmit": true },
+  "include": [
+    "packages/*/src/**/*.ts",
+    "packages/*/test/**/*.ts",
+    "packages/providers/*/src/**/*.ts",
+    "packages/providers/*/test/**/*.ts",
+    "apps/vscode-extension/src/**/*.ts",
+    "examples/*/src/**/*.ts",
+    "examples/*/test/**/*.ts",
+    "tests/**/*.ts"
+  ],
+  "exclude": ["packages/ui/**", "**/node_modules/**", "**/dist/**"]
+}

@@ -1,0 +1,52 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2025-01-01T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v8.0.0",
+  "resources": [
+    { "_id": "wrk_1", "_type": "workspace", "parentId": null, "name": "Insomnia Sample", "description": "Workspace", "scope": "collection" },
+    { "_id": "fld_1", "_type": "request_group", "parentId": "wrk_1", "name": "Orders", "metaSortKey": 1, "environment": { "orderPrefix": "ord" } },
+    {
+      "_id": "req_1",
+      "_type": "request",
+      "parentId": "fld_1",
+      "name": "Get order",
+      "method": "GET",
+      "url": "{{ _.base_url }}/orders/:orderId",
+      "pathParameters": [{ "name": "orderId", "value": "99" }],
+      "parameters": [{ "name": "verbose", "value": "true" }, { "name": "skip", "value": "1", "disabled": true }],
+      "headers": [{ "name": "Accept", "value": "application/json" }],
+      "authentication": { "type": "bearer", "token": "{{ _.token }}" },
+      "body": {},
+      "metaSortKey": 1,
+      "settingFollowRedirects": "off"
+    },
+    {
+      "_id": "req_2",
+      "_type": "request",
+      "parentId": "wrk_1",
+      "name": "GraphQL search",
+      "method": "POST",
+      "url": "{{ _.base_url }}/graphql",
+      "body": { "mimeType": "application/graphql", "text": "{\"query\":\"{ items { id } }\",\"variables\":{\"n\":1}}" },
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": 2
+    },
+    {
+      "_id": "req_3",
+      "_type": "request",
+      "parentId": "wrk_1",
+      "name": "Templated",
+      "method": "GET",
+      "url": "{{ _.base_url }}/uuid/{% uuid 'v4' %}",
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": 3
+    },
+    { "_id": "env_base", "_type": "environment", "parentId": "wrk_1", "name": "Base Environment", "data": { "base_url": "https://insomnia.example.test" } },
+    { "_id": "env_dev", "_type": "environment", "parentId": "env_base", "name": "Dev", "data": { "base_url": "http://localhost:8080", "token": "" }, "color": "#00ff00" },
+    { "_id": "spc_1", "_type": "api_spec", "parentId": "wrk_1", "fileName": "spec", "contents": "" },
+    { "_id": "jar_1", "_type": "cookie_jar", "parentId": "wrk_1", "name": "Default Jar", "cookies": [] }
+  ]
+}

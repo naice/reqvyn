@@ -1,0 +1,8 @@
+src/**
+node_modules/**
+build.mjs
+tsconfig*.json
+**/*.map
+**/*.test.ts
+dist/extension.cjs.LEGAL.txt
+test/**
