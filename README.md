@@ -11,6 +11,14 @@
   <a href="https://github.com/naice/reqvyn/tree/main/docs">Documentation</a>
 </p>
 
+<p align="center">
+  <a href="https://marketplace.visualstudio.com/items?itemName=naice.reqvyn"><img src="https://vsmarketplacebadges.dev/version-short/naice.reqvyn.svg?label=Marketplace&color=0D111B" alt="Marketplace version"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=naice.reqvyn"><img src="https://vsmarketplacebadges.dev/installs-short/naice.reqvyn.svg?label=Installs" alt="Marketplace installs"></a>
+  <a href="https://github.com/naice/reqvyn/blob/main/LICENSE"><img src="https://img.shields.io/github/license/naice/reqvyn" alt="License: MIT"></a>
+  <a href="https://github.com/naice/reqvyn/stargazers"><img src="https://img.shields.io/github/stars/naice/reqvyn?style=flat" alt="GitHub stars"></a>
+  <a href="https://ko-fi.com/emmuss"><img src="https://img.shields.io/badge/Ko--fi-Support%20REQVYN-FF5E5B?logo=ko-fi&logoColor=white" alt="Support REQVYN on Ko-fi"></a>
+</p>
+
 ---
 
 REQVYN lets you build, send and test HTTP requests without leaving the editor. Collections are plain JSON files (one file per request) that you can review in pull requests and share through Git. Secrets stay in the operating system keychain, through VS Code SecretStorage.
@@ -103,6 +111,8 @@ The full list is in [ARCHITECTURE.md](ARCHITECTURE.md#feature-matrix) and [CHANG
 ## Contributing
 
 Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+If REQVYN saves you time, you can support its development on [Ko-fi](https://ko-fi.com/emmuss).
 
 ## License
 
