@@ -2,7 +2,7 @@
   "name": "reqvyn",
   "displayName": "REQVYN – API Client",
   "description": "Local-first API client: Send. Inspect. Repeat.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "publisher": "naice",
   "license": "MIT",
   "repository": {
@@ -13,6 +13,9 @@
   "homepage": "https://aineering.de/reqvyn/",
   "bugs": {
     "url": "https://github.com/naice/reqvyn/issues"
+  },
+  "sponsor": {
+    "url": "https://ko-fi.com/emmuss"
   },
   "private": true,
   "preview": true,

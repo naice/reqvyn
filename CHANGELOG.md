@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+## [0.1.3] – 2026-11-20
+
+### Added
+
+- Sponsor link to [Ko-fi](https://ko-fi.com/emmuss): shown as a Sponsor button in VS Code's extension view and on the GitHub repository.
+- Badges for the Marketplace version, installs, license and GitHub stars in the README.
+
 ## [0.1.2] – 2026-11-20
 
 ### Changed
