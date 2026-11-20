@@ -10,6 +10,20 @@
 
 REQVYN lets you build, send and test HTTP requests without leaving the editor. Collections are plain JSON files (one file per request) that you can review in pull requests and share through Git. Secrets stay in the operating system keychain, through VS Code SecretStorage.
 
+![REQVYN request editor with a JSON response](assets/screenshots/01-request-response.png)
+
+## Screenshots
+
+| | |
+| --- | --- |
+| ![Assertion builder and variable extraction](assets/screenshots/02-tests-assertions.png) <br> **Tests without code:** assertion builder and request chaining | ![Timing breakdown and event timeline](assets/screenshots/03-timeline.png) <br> **Timeline:** timing breakdown, events and variables set |
+| ![POST request with a JSON body](assets/screenshots/04-post-json-body.png) <br> **Request bodies:** JSON with variables and dynamic values | ![Code generation dialog](assets/screenshots/05-code-generation.png) <br> **Code generation:** cURL, JavaScript, Python, C# and more |
+| ![Collection runner results](assets/screenshots/06-collection-runner.png) <br> **Collection runner:** iterations, results and JSON/HTML/JUnit reports | ![Environment editor](assets/screenshots/07-environments.png) <br> **Environments:** variables, with secrets kept in SecretStorage |
+
+REQVYN follows your VS Code theme:
+
+![REQVYN in a light theme](assets/screenshots/08-request-response-light.png)
+
 ## Highlights
 
 - **Requests:** REST and GraphQL with every common body type: JSON, XML, text, form-urlencoded, multipart (with files), binary files and GraphQL. You get a CodeMirror editor with variable highlighting and autocompletion.
