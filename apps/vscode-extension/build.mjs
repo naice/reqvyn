@@ -19,10 +19,13 @@ cpSync(uiDist, webviewOut, { recursive: true });
 
 // Marketplace README/CHANGELOG/LICENSE are derived from the repository root. Relative links only
 // work on the repository host, so they are turned into plain text (the logo is shown by `icon`).
+// Relative images (screenshots) point to the raw files on GitHub instead, so they still show up.
 const root = join(here, '../..');
+const rawBase = 'https://raw.githubusercontent.com/naice/reqvyn/main/';
 const readme = readFileSync(join(root, 'README.md'), 'utf8')
   .replace(/<p align="center">\s*<img[^>]*>\s*<\/p>\s*/i, '')
-  .replace(/\[([^\]]+)\]\((?!https?:|#)[^)]+\)/g, '$1');
+  .replace(/!\[([^\]]*)\]\((?!https?:)([^)]+)\)/g, (_, alt, path) => `![${alt}](${rawBase}${path})`)
+  .replace(/(?<!!)\[([^\]]+)\]\((?!https?:|#)[^)]+\)/g, '$1');
 writeFileSync(join(here, 'README.md'), readme);
 cpSync(join(root, 'CHANGELOG.md'), join(here, 'CHANGELOG.md'));
 cpSync(join(root, 'LICENSE'), join(here, 'LICENSE'));

@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+## [0.1.1] – 2026-11-20
+
+### Added
+
+- Screenshots in the README and on the Marketplace page.
+
 ## [0.1.0] – 2026-11-20
 
 First public preview.
