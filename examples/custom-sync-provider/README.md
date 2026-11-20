@@ -107,7 +107,7 @@ also retries whole sync runs.
 
 ```jsonc
 {
-  "extensionDependencies": ["reqvyn.reqvyn"],   // REQVYN is installed and activated first
+  "extensionDependencies": ["naice.reqvyn"],   // REQVYN is installed and activated first
   "activationEvents": ["onStartupFinished"],
   "dependencies": { "@reqvyn/provider-sdk": "^1.0.0" }
 }
@@ -116,7 +116,7 @@ also retries whole sync runs.
 `src/extension.ts`:
 
 ```ts
-const api = await vscode.extensions.getExtension('reqvyn.reqvyn')?.activate();
+const api = await vscode.extensions.getExtension('naice.reqvyn')?.activate();
 if (isReqvynExtensionApi(api)) context.subscriptions.push(api.registerSyncProvider(factory));
 ```
 

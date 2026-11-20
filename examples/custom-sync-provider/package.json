@@ -7,7 +7,7 @@
   "type": "module",
   "main": "./dist/extension.cjs",
   "engines": { "vscode": "^1.90.0" },
-  "extensionDependencies": ["reqvyn.reqvyn"],
+  "extensionDependencies": ["naice.reqvyn"],
   "activationEvents": ["onStartupFinished"],
   "scripts": { "build": "esbuild src/extension.ts --bundle --platform=node --format=cjs --external:vscode --outfile=dist/extension.cjs" },
   "dependencies": { "@reqvyn/provider-sdk": "workspace:*" },

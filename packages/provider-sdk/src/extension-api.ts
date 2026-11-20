@@ -6,13 +6,13 @@ export interface Disposable {
 }
 
 /** Marketplace id of the REQVYN extension. */
-export const REQVYN_EXTENSION_ID = 'reqvyn.reqvyn';
+export const REQVYN_EXTENSION_ID = 'naice.reqvyn';
 
 /** Current version of {@link ReqvynExtensionApi}. */
 export const REQVYN_EXTENSION_API_VERSION = 1 as const;
 
 /**
- * API returned by `vscode.extensions.getExtension('reqvyn.reqvyn')?.activate()`.
+ * API returned by `vscode.extensions.getExtension('naice.reqvyn')?.activate()`.
  *
  * Trust model: providers run in the extension host with the permissions of the contributing
  * extension (VS Code does not sandbox extensions). REQVYN only hands each provider instance its

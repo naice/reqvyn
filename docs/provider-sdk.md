@@ -279,7 +279,7 @@ Your extension depends on REQVYN and registers the factory through the API that 
 {
   "engines": { "vscode": "^1.90.0" },
   "main": "./dist/extension.cjs",
-  "extensionDependencies": ["reqvyn.reqvyn"],
+  "extensionDependencies": ["naice.reqvyn"],
   "activationEvents": ["onStartupFinished"],
   "dependencies": { "@reqvyn/provider-sdk": "…" }
 }

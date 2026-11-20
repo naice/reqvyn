@@ -29,7 +29,7 @@ REQVYN has two kinds of stores:
 
 | Store | Location | Shared? |
 | --- | --- | --- |
-| **Personal** | VS Code global storage of the extension (`…/globalStorage/reqvyn.reqvyn/personal`) | No |
+| **Personal** | VS Code global storage of the extension (`…/globalStorage/naice.reqvyn/personal`) | No |
 | **Workspace** | `<workspace folder>/.reqvyn/` | Yes – commit it to Git |
 
 If the opened folder already contains a `.reqvyn/` directory it is used automatically. To create one,

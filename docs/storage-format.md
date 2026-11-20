@@ -23,7 +23,7 @@ no secrets.
 ```
 
 The personal store uses the same layout under the extension's global storage
-(`…/globalStorage/reqvyn.reqvyn/personal`).
+(`…/globalStorage/naice.reqvyn/personal`).
 
 **File names** are `<slug>.<id8>`: the slug is the lower-cased, ASCII-folded name (`a-z0-9` joined by
 `-`, max 60 characters, `untitled` if empty); `id8` is the first 8 characters of the entity's UUID.
