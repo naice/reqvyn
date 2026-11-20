@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+## [0.1.2] – 2026-11-20
+
+### Changed
+
+- The extension homepage is now the official website, https://aineering.de/reqvyn/. The README links to the website, the Marketplace and the documentation.
+
 ## [0.1.1] – 2026-11-20
 
 ### Added

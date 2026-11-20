@@ -1,14 +1,14 @@
 {
   "name": "reqvyn-monorepo",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "REQVYN – local-first API client for VS Code. Send. Inspect. Repeat.",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/naice/reqvyn.git"
   },
-  "homepage": "https://github.com/naice/reqvyn#readme",
+  "homepage": "https://aineering.de/reqvyn/",
   "bugs": {
     "url": "https://github.com/naice/reqvyn/issues"
   },

@@ -5,6 +5,11 @@
 <h1 align="center">REQVYN</h1>
 <p align="center"><strong>Send. Inspect. Repeat.</strong></p>
 <p align="center">A local-first, open-source API client for Visual Studio Code. No accounts, no cloud, no telemetry.</p>
+<p align="center">
+  <a href="https://aineering.de/reqvyn/">Website</a> ·
+  <a href="https://marketplace.visualstudio.com/items?itemName=naice.reqvyn">VS Code Marketplace</a> ·
+  <a href="https://github.com/naice/reqvyn/tree/main/docs">Documentation</a>
+</p>
 
 ---
 

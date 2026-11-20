@@ -2,7 +2,7 @@
   "name": "reqvyn",
   "displayName": "REQVYN – API Client",
   "description": "Local-first API client: Send. Inspect. Repeat.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "naice",
   "license": "MIT",
   "repository": {
@@ -10,7 +10,7 @@
     "url": "https://github.com/naice/reqvyn.git",
     "directory": "apps/vscode-extension"
   },
-  "homepage": "https://github.com/naice/reqvyn#readme",
+  "homepage": "https://aineering.de/reqvyn/",
   "bugs": {
     "url": "https://github.com/naice/reqvyn/issues"
   },
