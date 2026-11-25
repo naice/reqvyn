@@ -30,11 +30,18 @@ export const baseTheme = EditorView.theme({
     border: '1px solid var(--vscode-panel-border)',
     color: 'var(--vscode-descriptionForeground)',
   },
+  // Same colours as VS Code's webview find widget (Chromium find-in-page): solid yellow matches, orange current
+  // match, dark text. Far easier to spot than the translucent editor find colours, in light and dark themes alike.
   '.cm-searchMatch': {
-    backgroundColor: 'var(--vscode-editor-findMatchHighlightBackground)',
+    backgroundColor: '#ffff00',
     outline: '1px solid var(--vscode-editor-findMatchHighlightBorder, transparent)',
+    borderRadius: '1px',
   },
-  '.cm-searchMatch.cm-searchMatch-selected': { backgroundColor: 'var(--vscode-editor-findMatchBackground)' },
+  '.cm-searchMatch.cm-searchMatch-selected': {
+    backgroundColor: '#ff9632',
+    outline: '1px solid var(--vscode-editor-findMatchBorder, transparent)',
+  },
+  '.cm-searchMatch, .cm-searchMatch *': { color: '#000 !important' },
   '.cm-selectionMatch': { backgroundColor: 'var(--vscode-editor-selectionHighlightBackground)' },
   '.cm-matchingBracket, &.cm-focused .cm-matchingBracket': {
     backgroundColor: 'var(--vscode-editorBracketMatch-background)',

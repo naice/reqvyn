@@ -150,21 +150,87 @@ body.vscode-high-contrast-light .rv-var {
   font-size: 11px;
 }
 
-/* Search panel inputs follow VS Code inputs */
-.cm-panel.cm-search input,
-.cm-panel.cm-search button {
-  font: inherit;
+/* Find/replace panel (editor/searchPanel.ts), modelled on VS Code's find widget */
+.rv-find {
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 4px 6px;
+  font-family: var(--rv-font);
   font-size: 12px;
+}
+.rv-find.is-readonly {
+  padding-left: 8px;
+}
+.rv-find__expand {
+  align-self: stretch;
+  height: auto;
+}
+.rv-find__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.rv-find__row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.rv-find__row[hidden] {
+  display: none;
+}
+.rv-find__box {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  flex: 0 1 300px;
+  min-width: 120px;
+  height: 24px;
+  padding: 0 2px 0 0;
+  margin-right: 4px;
   color: var(--rv-input-fg);
   background: var(--rv-input-bg);
   border: 1px solid var(--rv-input-border);
   border-radius: var(--rv-radius);
 }
-.cm-panel.cm-search button {
-  color: var(--vscode-button-secondaryForeground);
-  background: var(--vscode-button-secondaryBackground);
-  background-image: none;
+.rv-find__box:focus-within {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: -1px;
 }
-.cm-panel.cm-search label {
-  font-size: 12px;
+.rv-find__box.is-error {
+  border-color: var(--vscode-inputValidation-errorBorder, var(--rv-fail));
+}
+.rv-find__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  padding: 0 6px;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+.rv-find__input::placeholder {
+  color: var(--vscode-input-placeholderForeground);
+}
+.rv-find__opt {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 1px;
+  border-radius: 3px;
+}
+.rv-find__count {
+  min-width: 72px;
+  padding: 0 6px 0 2px;
+  white-space: nowrap;
+  color: var(--rv-fg);
+}
+.rv-find__count.is-empty {
+  color: var(--rv-muted);
+}
+.rv-find__count.is-error {
+  color: var(--vscode-errorForeground, var(--rv-fail));
 }

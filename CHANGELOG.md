@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+### Changed
+
+- The find bar in editors (response body, request body, scripts) looks like VS Code's find widget: toggle buttons for match case, whole word and regex, a match counter ("3 of 12"), icon buttons, and a collapsible replace row in editable editors.
+- Search matches are highlighted in solid yellow, the current match in orange, as in VS Code's find widget.
+
+### Fixed
+
+- Ctrl+F in an editor no longer also opens VS Code's find widget, which took the focus away from the editor's own find bar.
+
 ## [0.1.3] – 2026-11-20
 
 ### Added

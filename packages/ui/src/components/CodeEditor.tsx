@@ -19,10 +19,18 @@ import { highlightSelectionMatches, search, searchKeymap } from '@codemirror/sea
 import { autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap } from '@codemirror/autocomplete';
 import type { LanguageId } from '../lib/language';
 import { languageExtension } from '../editor/languages';
+import { createSearchPanel } from '../editor/searchPanel';
 import { baseTheme, highlighting } from '../editor/theme';
 import { variableCompletionSource, variablesExtension } from '../editor/variablesExt';
 
 const External = Annotation.define<boolean>();
+
+/** Search shortcuts CodeMirror binds (Mod-f, Mod-g, Mod-Alt-g, F3) that VS Code would also act on. */
+function isEditorSearchKey(e: KeyboardEvent): boolean {
+  if (e.key === 'F3') return true;
+  const key = e.key.toLowerCase();
+  return (e.ctrlKey || e.metaKey) && (key === 'f' || key === 'g');
+}
 
 export interface CodeEditorProps {
   value: string;
@@ -60,7 +68,7 @@ export function CodeEditor(props: CodeEditorProps) {
       highlightActiveLine(),
       highlightSelectionMatches(),
       bracketMatching(),
-      search({ top: true }),
+      search({ top: true, createPanel: createSearchPanel }),
       baseTheme,
       highlighting,
       c.lang.of(languageExtension(props.language)),
@@ -83,7 +91,16 @@ export function CodeEditor(props: CodeEditorProps) {
     viewRef.current = view;
     lastValue.current = props.value;
     props.onView?.(view);
+    // VS Code forwards webview keydowns to the workbench, where Ctrl+F opens the webview find widget (and Ctrl+G
+    // "Go to Line") and steals focus from CodeMirror's own search panel. Once the editor has handled such a key,
+    // keep it from bubbling up to the forwarding listener on window.
+    const el = host.current!;
+    const keepSearchKeys = (e: KeyboardEvent) => {
+      if (e.defaultPrevented && isEditorSearchKey(e)) e.stopPropagation();
+    };
+    el.addEventListener('keydown', keepSearchKeys);
     return () => {
+      el.removeEventListener('keydown', keepSearchKeys);
       props.onView?.(null);
       view.destroy();
       viewRef.current = null;
