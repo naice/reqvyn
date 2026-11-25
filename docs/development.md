@@ -91,9 +91,26 @@ shipped.
 
 ## Publishing
 
-Publishing is not automated. You need **your own publisher account**. The `publisher` field in
-`apps/vscode-extension/package.json` must match a publisher you control, so change it before you
-publish.
+Releases are published by the [Release workflow](../.github/workflows/release.yml) when a version tag
+is pushed. It type-checks, lints, tests and builds, then publishes to the Visual Studio Marketplace with
+**trusted publishing** (GitHub Actions OIDC, no Personal Access Token). It also creates a GitHub release
+with the `.vsix` attached and the version's changelog section as notes.
+
+To release:
+
+1. Bump `version` in `apps/vscode-extension/package.json` and the root `package.json`, and move the
+   `Unreleased` changelog entries under a new version heading. Commit and push.
+2. Tag the commit with the version and push the tag, e.g. `git tag v0.1.4 && git push origin v0.1.4`.
+   The workflow fails if the tag does not match the extension version.
+
+One-time setup:
+
+- **Marketplace:** on the publisher's **Trusted Publishing** tab, create a policy with provider
+  _GitHub Actions_, the repository owner and name, workflow `release.yml` and environment `marketplace`.
+- **Open VSX (optional):** add an `OVSX_PAT` repository secret. Without it, Open VSX is skipped.
+
+A fork needs **its own publisher account**. The `publisher` field in `apps/vscode-extension/package.json`
+must match a publisher you control. Manual publishing still works:
 
 ```sh
 cd apps/vscode-extension
@@ -102,10 +119,6 @@ npx @vscode/vsce publish --no-dependencies
 
 npx ovsx publish ../../reqvyn.vsix -p <token>      # Open VSX
 ```
-
-Before publishing:
-
-- **Version:** bump `version` in `apps/vscode-extension/package.json`.
 
 ## Repository layout
 

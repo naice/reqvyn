@@ -1,0 +1,70 @@
+name: Release
+
+# Publishes the extension to the Visual Studio Marketplace with trusted publishing (OIDC, no PAT).
+# Trigger: push a tag that matches the extension version, e.g. `git tag v0.1.4 && git push origin v0.1.4`.
+# The Marketplace policy for publisher `naice` must name this repository, `release.yml` and the
+# `marketplace` environment.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: marketplace
+    env:
+      OVSX_PAT: ${{ secrets.OVSX_PAT }} # optional; Open VSX is skipped when unset
+    permissions:
+      contents: write # create the GitHub release
+      id-token: write # OIDC token for Marketplace trusted publishing
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Check tag matches extension version
+        run: |
+          version=$(node -p "require('./apps/vscode-extension/package.json').version")
+          if [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match extension version ${version}"
+            exit 1
+          fi
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm --filter reqvyn package
+
+      - name: Publish to Visual Studio Marketplace
+        run: npx --yes @vscode/vsce@4.1.1 publish --oidc --packagePath reqvyn.vsix
+
+      - name: Publish to Open VSX
+        if: ${{ env.OVSX_PAT != '' }}
+        run: npx --yes ovsx publish reqvyn.vsix -p "$OVSX_PAT"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v v="$version" '
+            index($0, "## [" v "]") == 1 { on = 1; next }
+            on && index($0, "## [") == 1 { exit }
+            on { print }
+          ' CHANGELOG.md > release-notes.md
+          gh release create "$GITHUB_REF_NAME" reqvyn.vsix --title "REQVYN $version" --notes-file release-notes.md
