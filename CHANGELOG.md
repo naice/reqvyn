@@ -4,6 +4,8 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+## [0.1.4] – 2026-11-25
+
 ### Changed
 
 - The find bar in editors (response body, request body, scripts) looks like VS Code's find widget: toggle buttons for match case, whole word and regex, a match counter ("3 of 12"), icon buttons, and a collapsible replace row in editable editors.
